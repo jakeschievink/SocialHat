@@ -3,16 +3,8 @@
 #include <Adafruit_SSD1306.h>
 #include "Scroll.h"
 
-#define OLED_DC    11
-#define OLED_CS    12
-#define OLED_CLK   10
-#define OLED_MOSI   9
-#define OLED_RESET 13
 
-
-
-Adafruit_SSD1306 disp(OLED_MOSI, OLED_CLK, OLED_DC, OLED_RESET, OLED_CS);
-Scroll :: Scroll(){
+Scroll :: Scroll(int oled_mosi, int oled_clk, int oled_dc, int oled_reset, int oled_cs) : disp(oled_mosi, oled_clk, oled_dc, oled_reset, oled_cs){
 }
 void Scroll :: init(){
     configuration  = {UPWARDS,2};

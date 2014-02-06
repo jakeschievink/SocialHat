@@ -4,20 +4,25 @@
 #include <EEPROM.h>
 #include "EEPROMAnything.h"
 #include "Scroll.h"
-
-Scroll scrollscreen;
+Scroll scrollscreen(9, 10, 11, 13, 12) ;
 char message[200];
+
+typedef enum {SCROLL, IMAGE} mode;
 void setup() {
     Serial.begin(9600);
     scrollscreen.init();
-    EEPROM_readAnything(0, message);
+    EEPROM_readAnything(1, message);
     scrollscreen.setMessage(message);
+    mode currentmode = SCROLL;
     Serial.println(message);
+    while(currentmode == SCROLL){
+        scrollscreen.startScroll();
+        checkSerial();
+    }
+
 }
 
 void loop() {
-    scrollscreen.startScroll();
-    checkSerial();
 }
 
 void checkSerial(){
@@ -33,7 +38,7 @@ void checkSerial(){
         recieveChars().toCharArray(tmpMsg, 100);
         Serial.print(tmpMsg);
         scrollscreen.setMessage(tmpMsg);
-        EEPROM_writeAnything(0, tmpMsg);
+        Serial.println(EEPROM_writeAnything(1, tmpMsg));
     }
 }
 
