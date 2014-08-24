@@ -1,4 +1,4 @@
-#include "ST7565.h"
+#include <ST7565.h>
 #include "ScreenController.h"
 #include "thankyouBMP.h"
 #include "glasses.h"
@@ -12,14 +12,14 @@
 const uint8_t* images[] = {
     thankyou,
     glasses
-}
+};
 
 /* ST7565 glcd(23, 22, 21, 20, 19); */
 ScreenController screencontroller(23,22,21,20,19);
 enum States {MESSAGELOOP, SLIDESHOW, RANDOMWORD};
 
 States currentstate = MESSAGELOOP;
-char* listOfMessages[] = {
+char* messages[] = {
     "Botany",
     "Communities",
     "Dystopia",
@@ -42,10 +42,10 @@ void setup(){
 void loop(){
     switch(currentstate){
         case MESSAGELOOP:
-            screencontroller.looplines(&messages);
+            screencontroller.looplines(messages);
             break;
         case SLIDESHOW:
-            screencontroller.loopimages(&images);
+            screencontroller.loopimages(images);
             break;
         case RANDOMWORD:
             screencontroller.showword(getrandomword());
@@ -54,7 +54,8 @@ void loop(){
 }
 
 char* getrandomword(){
-    static int maxrand = sizeof(words)/sizeof(words[0])
+    static int maxrand = sizeof(words)/sizeof(words[0]);
     srandom(600);
-    randomindex = random() % maxrand;
+    int randomindex = random() % maxrand;
+    return words[randomindex];
 }

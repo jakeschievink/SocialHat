@@ -53,8 +53,8 @@ char* words[] = {
     "inspireconvention",
     "skill",
     "harry",
-    "financial",
-}
+    "financial"
+};
     /* "furnish", */
     /* "compel", */
     /* "venture", */

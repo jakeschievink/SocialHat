@@ -1,18 +1,23 @@
 #include <Arduino.h>
-#include "ST7565.h"
 
 #define SCROLLINTERVAL 5000
 
 class ScreenController{
+	
 public:
-    ScreenController(int8_t SID, int8_t SCLK, int8_t A0, int8_t RST, int8_t CS) :disp(SID, SCLK, AO, RST, CS) {};
-    void init(char* msgs[]);
+
+	ScreenController(int8_t SID, int8_t SCLK, int8_t A0, int8_t RST, int8_t CS);
+    void init();
     void startScroll();
-    void showimage();
-    void looplines();
-    void showword();
+    void showimage(const uint8_t* image);
+    void loopimages(const uint8_t* images[]);
+    void looplines(char** messages);
+    void showword(char* word);
     ST7565 disp;
+
 private:
-    int getcenteroffset(int characters)
+
+    int getcenteroffset(int chars);
+    
 };
     
