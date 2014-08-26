@@ -52,13 +52,14 @@ void loop(){
             break;
         case RANDOMWORD:
             screencontroller.showword(getrandomword());
+            delay(5000);
             break;
     }
 }  
 
 char* getrandomword(){
     static int maxrand = sizeof(words)/sizeof(words[0]);
-    srandom(600);
-    int randomindex = random() % maxrand;
+    int randomindex = random(maxrand);
+    Serial.println(randomindex);
     return words[randomindex];
 }
