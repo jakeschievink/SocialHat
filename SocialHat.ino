@@ -18,8 +18,9 @@ const uint8_t* images[] = {
 ScreenController screencontroller(23,22,21,20,19);
 enum States {MESSAGELOOP, SLIDESHOW, RANDOMWORD};
 
-States currentstate = MESSAGELOOP;
+States currentstate = SLIDESHOW;
 char* messages[] = {
+    "Open Source",
     "Botany",
     "Communities",
     "Dystopia",
@@ -30,19 +31,19 @@ char* messages[] = {
     "Stress",
     "Individualism",
     "Violence",
-    "Communes", 
-    "Autonomy"
+    "Communes"
 };
 
 void setup(){
   Serial.begin(9600);
   screencontroller.init();
+  delay(2000);
 }
 
 void loop(){
     switch(currentstate){
         case MESSAGELOOP:
-            screencontroller.looplines(messages);
+            screencontroller.looplines(&messages);
             break;
         case SLIDESHOW:
             screencontroller.loopimages(images);
@@ -51,7 +52,7 @@ void loop(){
             screencontroller.showword(getrandomword());
             break;
     }
-}
+}  
 
 char* getrandomword(){
     static int maxrand = sizeof(words)/sizeof(words[0]);

@@ -11,7 +11,7 @@ public:
     void startScroll();
     void showimage(const uint8_t* image);
     void loopimages(const uint8_t* images[]);
-    void looplines(char** messages);
+    void looplines(char *(*messages)[12]);
     void showword(char* word);
     ST7565 disp;
 
