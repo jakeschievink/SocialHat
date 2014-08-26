@@ -42,7 +42,8 @@ void ScreenController :: loopimages(const uint8_t* images[]){
     static long oldtime = 0;
     static int curindex = 0;
     long currenttime = millis();
-    int maxindex = sizeof(images)/sizeof(images[0]);
+    int maxindex = (
+    sizeof(images)/sizeof(*images))+1;
     if(currenttime - oldtime > SCROLLINTERVAL){
       if(++curindex > maxindex)
             curindex = 0;

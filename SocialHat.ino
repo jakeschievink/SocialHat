@@ -2,6 +2,7 @@
 #include "ScreenController.h"
 #include "thankyouBMP.h"
 #include "glasses.h"
+#include "stretch.h"
 
 #include "words.h"
 
@@ -11,14 +12,15 @@
 
 const uint8_t* images[] = {
     thankyou,
-    glasses
+    glasses,
+    stretch
 };
 
 /* ST7565 glcd(23, 22, 21, 20, 19); */
 ScreenController screencontroller(23,22,21,20,19);
 enum States {MESSAGELOOP, SLIDESHOW, RANDOMWORD};
 
-States currentstate = SLIDESHOW;
+States currentstate = RANDOMWORD;
 char* messages[] = {
     "Open Source",
     "Botany",
