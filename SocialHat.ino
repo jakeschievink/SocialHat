@@ -1,12 +1,14 @@
 #include <ST7565.h>
+#include "Timer.h"
 #include "ScreenController.h"
 #include "thankyouBMP.h"
 #include "glasses.h"
 #include "stretch.h"
-
 #include "words.h"
 
-#define BACKLIGHT_LED 10
+#define BUTTON_PIN 14
+
+#define BACKLIGHT_PIN 9
 
 #define DEBUG 1
 
@@ -16,20 +18,22 @@ const uint8_t* images[] = {
     stretch
 };
 
-/* ST7565 glcd(23, 22, 21, 20, 19); */
-ScreenController screencontroller(23,22,21,20,19);
+ScreenController screencontroller(8,7,6,5,4);
+
+Timer t;
+
 enum States {MESSAGELOOP, SLIDESHOW, RANDOMWORD};
 
-States currentstate = RANDOMWORD;
+States currentstate = MESSAGELOOP;
+
 char* messages[] = {
+    "Art",
     "Open Source",
+    "Anarchism",
     "Botany",
     "Communities",
     "Dystopia",
-    "Creation",
-    "Cyber Technology",
     "Drawing",
-    "Anarchism",
     "Stress",
     "Individualism",
     "Violence",
@@ -37,12 +41,24 @@ char* messages[] = {
 };
 
 void setup(){
-  Serial.begin(9600);
-  screencontroller.init();
-  delay(2000);
+    Serial.begin(9600);
+    pinMode(BUTTON_PIN, INPUT);
+    pinMode(BACKLIGHT_PIN, OUTPUT);
+    screencontroller.init();
+    analogWrite(BACKLIGHT_PIN, 100);
+    delay(2000);
 }
 
 void loop(){
+    long currenttime = millis();
+    if(pressed() == HIGH && currentstate != RANDOMWORD){
+        currentstate = States((int)currentstate + 1);
+        delay(1000);
+    }else if( pressed() == HIGH && currentstate == RANDOMWORD){
+        currentstate = MESSAGELOOP; 
+        delay(1000);
+    }
+
     switch(currentstate){
         case MESSAGELOOP:
             screencontroller.looplines(&messages);
@@ -51,15 +67,31 @@ void loop(){
             screencontroller.loopimages(images);
             break;
         case RANDOMWORD:
-            screencontroller.showword(getrandomword());
-            delay(5000);
+            displayrandomwords();
             break;
     }
 }  
 
+int pressed(){
+    static long oldtime = 0;
+    if(currenttime - oldtime > 1000){
+        starttime = millis();
+        return digitalRead(BUTTON_PIN);
+    }else{
+        return 0; 
+    }
+}
+
+void displayrandomwords(){
+    static long oldtime = 0;
+    if(currenttime - oldtime > 5000){
+        oldtime = millis();
+        screencontroller.showword(getrandomword());
+    }
+}
+
 char* getrandomword(){
     static int maxrand = sizeof(words)/sizeof(words[0]);
     int randomindex = random(maxrand);
-    Serial.println(randomindex);
     return words[randomindex];
 }

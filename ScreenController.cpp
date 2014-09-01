@@ -4,7 +4,7 @@
 ScreenController :: ScreenController(int8_t SID, int8_t SCLK, int8_t AO, int8_t RST, int8_t CS) : disp(SID, SCLK, AO, RST, CS) {};
 
 void ScreenController :: init(){
-    disp.begin(0x18);
+    disp.begin(0x20);
     disp.setpixel(10, 10, BLACK);
     delay(2000);
 }
