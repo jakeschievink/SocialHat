@@ -1,8 +1,8 @@
 #include <ST7565.h>
-#include "Timer.h"
 #include "ScreenController.h"
 #include "thankyouBMP.h"
 #include "glasses.h"
+#include "johntab.h"
 #include "stretch.h"
 #include "words.h"
 
@@ -13,6 +13,7 @@
 #define DEBUG 1
 
 const uint8_t* images[] = {
+    johntab,
     thankyou,
     glasses,
     stretch
@@ -20,14 +21,15 @@ const uint8_t* images[] = {
 
 ScreenController screencontroller(8,7,6,5,4);
 
-Timer t;
-
 enum States {MESSAGELOOP, SLIDESHOW, RANDOMWORD};
 
 States currentstate = MESSAGELOOP;
 
+long currenttime;
+
 char* messages[] = {
     "Art",
+    "Plants",
     "Open Source",
     "Anarchism",
     "Botany",
@@ -50,13 +52,11 @@ void setup(){
 }
 
 void loop(){
-    long currenttime = millis();
-    if(pressed() == HIGH && currentstate != RANDOMWORD){
+    currenttime = millis();
+    if(pressed() == 1 && currentstate != RANDOMWORD){
         currentstate = States((int)currentstate + 1);
-        delay(1000);
-    }else if( pressed() == HIGH && currentstate == RANDOMWORD){
+    }else if( pressed() == 1 && currentstate == RANDOMWORD){
         currentstate = MESSAGELOOP; 
-        delay(1000);
     }
 
     switch(currentstate){
@@ -74,12 +74,12 @@ void loop(){
 
 int pressed(){
     static long oldtime = 0;
-    if(currenttime - oldtime > 1000){
-        starttime = millis();
-        return digitalRead(BUTTON_PIN);
-    }else{
-        return 0; 
+    Serial.println(currenttime - oldtime);
+    if(currenttime - oldtime > 1000 && digitalRead(BUTTON_PIN) == 1){
+        oldtime = millis();
+        return 1;
     }
+    return 0; 
 }
 
 void displayrandomwords(){
