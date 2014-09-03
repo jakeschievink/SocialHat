@@ -46,6 +46,7 @@ void setup(){
     Serial.begin(9600);
     pinMode(BUTTON_PIN, INPUT);
     pinMode(BACKLIGHT_PIN, OUTPUT);
+    attachInterrupt(BUTTON_PIN, press, RISING);
     screencontroller.init();
     analogWrite(BACKLIGHT_PIN, 100);
     delay(2000);
@@ -53,12 +54,6 @@ void setup(){
 
 void loop(){
     currenttime = millis();
-    if(pressed() == 1 && currentstate != RANDOMWORD){
-        currentstate = States((int)currentstate + 1);
-    }else if( pressed() == 1 && currentstate == RANDOMWORD){
-        currentstate = MESSAGELOOP; 
-    }
-
     switch(currentstate){
         case MESSAGELOOP:
             screencontroller.looplines(&messages);
@@ -72,14 +67,13 @@ void loop(){
     }
 }  
 
-int pressed(){
+void press(){
     static long oldtime = 0;
-    Serial.println(currenttime - oldtime);
-    if(currenttime - oldtime > 1000 && digitalRead(BUTTON_PIN) == 1){
-        oldtime = millis();
-        return 1;
+    if(currenttime - oldtime > 1000 && currentstate != RANDOMWORD){
+        currentstate = States((int)currentstate + 1);
+    }else if(currenttime - oldtime > 1000 && currentstate == RANDOMWORD){
+        currentstate = MESSAGELOOP; 
     }
-    return 0; 
 }
 
 void displayrandomwords(){
