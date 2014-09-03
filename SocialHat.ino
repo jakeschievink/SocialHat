@@ -14,16 +14,21 @@
 #define DEBUG 1
 
 const uint8_t* images[] = {
+    stretch,
     johntab,
-    thankyou,
     glasses,
-    opensub,
-    stretch
+    thankyou,
+    opensub
+};
+
+const uint8_t* opensubimages[]={
+    glasses,
+    opensub
 };
 
 ScreenController screencontroller(8,7,6,5,4);
 
-enum States {MESSAGELOOP, SLIDESHOW, RANDOMWORD};
+enum States {MESSAGELOOP, SLIDESHOW, OPENFORSUBMISSIONS, RANDOMWORD};
 
 States currentstate = MESSAGELOOP;
 
@@ -61,7 +66,10 @@ void loop(){
             screencontroller.looplines(&messages);
             break;
         case SLIDESHOW:
-            screencontroller.loopimages(images);
+            screencontroller.loopimages(images, sizeof(images)/sizeof(*images));
+            break;
+        case OPENFORSUBMISSIONS:
+            screencontroller.loopimages(opensubimages, sizeof(opensubimages)/sizeof(*opensubimages));
             break;
         case RANDOMWORD:
             displayrandomwords();
