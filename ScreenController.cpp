@@ -28,7 +28,6 @@ void ScreenController :: looplines(char *(*messages)[12]){
                 startline = 0;
             }
             int offset = getcenteroffset(strlen(messages[0][startline+i]));
-            Serial.println(offset);
             disp.drawstring(offset, i*2, messages[0][startline+i]);
         }
         startline++;
@@ -43,13 +42,11 @@ void ScreenController :: loopimages(const uint8_t* images[]){
     static int curindex = 0;
     long currenttime = millis();
     int maxindex = (
-    sizeof(images)/sizeof(*images))+1;
+    sizeof(images)/sizeof(*images[0]));
     if(currenttime - oldtime > SCROLLINTERVAL){
       if(++curindex > maxindex)
             curindex = 0;
       showimage(images[curindex]);
-      Serial.print(curindex);
-        
       oldtime = millis();
     }
 }

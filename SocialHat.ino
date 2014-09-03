@@ -3,6 +3,7 @@
 #include "thankyouBMP.h"
 #include "glasses.h"
 #include "johntab.h"
+#include "opensub.h"
 #include "stretch.h"
 #include "words.h"
 
@@ -16,6 +17,7 @@ const uint8_t* images[] = {
     johntab,
     thankyou,
     glasses,
+    opensub,
     stretch
 };
 
